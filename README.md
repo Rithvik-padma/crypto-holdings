@@ -1,5 +1,6 @@
-# crypto-holdings
-Crypto holdings app - current price of the holdings, live price of the holding coins .etc 
+# Crypto holdings
+Crypto holdings app - current price of the holdings, live price of the holding coins .etc   
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
