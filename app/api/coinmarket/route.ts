@@ -9,7 +9,6 @@ export async function GET(request: Request) {
         }
     })
     const data = await res.json()
-    console.log(data)
     const newData = {
         status: data?.status,
         id: data?.data?.id,
