@@ -28,12 +28,12 @@ const Home: React.FC = () => {
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center">
-      <div>
+      <div className='flex flex-col items-center mob:mx-3'>
         <h1 className="text-3xl font-bold">Crypto Holdings</h1>
         <p className="text-gray-600">
           App to track your crypto holdings and live prices
         </p>
-        <div>
+        <div className='flex flex-col items-center my-2'>
           <TextField.Input 
             placeholder="Enter the symbol"
             value={symbol}
