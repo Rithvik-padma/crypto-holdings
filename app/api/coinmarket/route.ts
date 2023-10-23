@@ -5,7 +5,7 @@ export async function GET(request: Request) {
     const symbol = searchParams.get('symbol')
     const res = await fetch(`https://pro-api.coinmarketcap.com/v1/tools/price-conversion?amount=${amount}&symbol=${symbol}`, {
         headers: {
-            'X-CMC_PRO_API_KEY': process.env.COINMARKET_API_KEY,
+            'X-CMC_PRO_API_KEY': process.env.COINMARKET_API_KEY!,
         }
     })
     const data = await res.json()
