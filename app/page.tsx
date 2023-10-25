@@ -87,7 +87,7 @@ const Home: React.FC = () => {
       <div className='flex flex-col items-center mob:mx-3'>
         <div className='text-center caret-transparent'>
           <h1 className="text-3xl font-bold">Crypto Holdings</h1>
-          <p className="text-gray-600">
+          <p className="text-gray-600 mob:text-sm">
             App to track your crypto holdings and live prices
           </p>
         </div>
