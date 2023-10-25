@@ -34,7 +34,7 @@ const AddHoldingModal: React.FC<AddModalProps>= ({addCoin, triggerError}: AddMod
 	const openModal = () => setIsOpen(true)
   const closeModal = () => {
 		setSelectedCoin(coinsList[0])
-		setAmount(0)
+		setAmount(NaN)
 		setIsOpen(false)
 	}
 
@@ -48,8 +48,9 @@ const AddHoldingModal: React.FC<AddModalProps>= ({addCoin, triggerError}: AddMod
 					className="h-[11px] w-[11px]"
 					aria-hidden="true"
 				/>
-				<span >Add coin</span>
+				<span>Add coin</span>
 			</Button>
+			{isOpen && <div className="z-10 h-screen w-screen absolute left-0 top-0 backdrop-blur-sm"></div>}
 			<Transition appear show={isOpen}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <Transition.Child
@@ -72,7 +73,7 @@ const AddHoldingModal: React.FC<AddModalProps>= ({addCoin, triggerError}: AddMod
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform rounded-2xl bg-gray-900 p-6 text-left align-middle shadow-xl transition-all text-center">
+                <Dialog.Panel className="w-full max-w-md transform rounded-2xl bg-gray-900 p-6 align-middle shadow-xl transition-all text-center">
                   <Dialog.Title
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-200"
@@ -119,7 +120,7 @@ const AddHoldingModal: React.FC<AddModalProps>= ({addCoin, triggerError}: AddMod
 												placeholder={`in ${selectedCoin}`}
 												value={amount}
 												onChange={(e) => setAmount(e.target.value.length ? parseFloat(e.target.value) : NaN)}
-												className="w-[60px] text-xs border-[1px] border-gray-600 rounded-md p-1 py-2 text-center text-gray-200 bg-gray-900 focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300" 
+												className="w-[60px] text-xs border-[1px] border-gray-600 rounded-md p-1 py-2 text-center text-gray-200 bg-gray-900 focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-1" 
 											/>
 										</div>
                     <Button

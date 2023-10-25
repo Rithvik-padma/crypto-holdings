@@ -35,3 +35,19 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+  margin: 1px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: gray;
+  opacity: 900;
+  border-radius: 3px;
+}

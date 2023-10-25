@@ -1,21 +1,20 @@
 
 export async function GET(request: Request) {
     const {searchParams} = new URL(request.url)
-    const amount = searchParams.get('amount')
     const symbol = searchParams.get('symbol')
-    const res = await fetch(`https://pro-api.coinmarketcap.com/v1/tools/price-conversion?amount=${amount}&symbol=${symbol}`, {
+    const res = await fetch(`https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=${symbol}`, {
         headers: {
             'X-CMC_PRO_API_KEY': process.env.COINMARKET_API_KEY!,
         }
     })
     const data = await res.json()
     const newData = {
-        status: data?.status,
-        id: data?.data?.id,
-        name: data?.data?.name,
-        symbol: data?.data?.symbol,
-        amount: data?.data?.amount,
-        price: data?.data?.quote?.USD?.price
+        status: data.status,
+        id: data?.data[symbol!!]?.id,
+        name: data?.data[symbol!!].name,
+        symbol: data?.data[symbol!!].symbol,
+        price: data?.data[symbol!!]?.quote?.USD?.price.toFixed(2),
+        percent_change_24h: data?.data[symbol!!]?.quote?.USD?.percent_change_24h.toFixed(3)
     }
     return Response.json(newData)   
   }

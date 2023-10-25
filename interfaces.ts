@@ -12,3 +12,9 @@ export interface AddModalProps {
     addCoin: (newCoin: CoinHolding) => void,
     triggerError: (Error: string) => void
 }
+
+export interface CoinStats{
+    symbol: string,
+    fiatAmount: number,
+    percentChange: number
+}
