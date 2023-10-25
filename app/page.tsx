@@ -101,11 +101,11 @@ const Home: React.FC = () => {
           </Listbox>
         </div>
         <div className="mt-1 bg-gray-900 w-[300px] p-4 rounded-lg flex flex-row justify-between items-center">
-          <div className="text-lg">
-            <span>{selectedCoin?.amount} </span>
-            <span>{selectedCoin?.symbol}</span>
+          <div className="text-[18px] flex flex-col gap-[2px]">
+            <span>{selectedCoin?.amount} {selectedCoin?.symbol}</span>
+            {selectedCoinStats && <span className="text-[11px] text-gray-500">~ ${selectedCoin?.amount*selectedCoinStats.fiatAmount}</span>}
           </div>
-          <div className="flex flex-col gap-1 items-center">
+          <div className="flex flex-col gap-[2px] items-center">
             <span className="text-[13px]">1 {selectedCoinStats?.symbol} = ${selectedCoinStats?.fiatAmount}</span>
             <div className={`flex flex-row items-center ${selectedCoinStats && selectedCoinStats?.percentChange > 0 ? "text-green-500" : "text-red-500"}`}>
               <span className="text-sm">{selectedCoinStats && selectedCoinStats?.percentChange > 0 ? "+": "-"}</span>
