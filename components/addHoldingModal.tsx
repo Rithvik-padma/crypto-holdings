@@ -31,7 +31,7 @@ const AddHoldingModal: React.FC<AddModalProps>= ({coinHoldings, addCoin, trigger
         triggerError(res.data.status.error_message)
       }
       else{
-					await setCoinsList(res?.data?.coinData?.map((coin: CoinData) => coin.symbol.toUpperCase()))
+					await setCoinsList(res?.data?.coinData?.map((coin: CoinData) => coin.symbol).filter((coinItem: string) => !coinHoldings.find((holding) => holding.symbol === coinItem)))
       }
     }
     catch(err){
