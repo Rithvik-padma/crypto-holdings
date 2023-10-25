@@ -108,7 +108,7 @@ const AddHoldingModal: React.FC<AddModalProps>= ({coinHoldings, initialCoinsList
 												placeholder={`in ${selectedCoin}`}
 												value={amount}
 												onChange={(e) => setAmount(e.target.value.length ? parseFloat(e.target.value) : NaN)}
-												className="w-[60px] text-xs border-[1px] border-gray-600 rounded-md p-1 py-2 text-center text-gray-200 bg-gray-900 focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-1" 
+												className="w-[60px] text-xs border-[1px] border-gray-600 rounded-md p-1 py-2 text-center text-gray-200 bg-gray-900 focus:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-1" 
 											/>
 										</div>
                     <Button
