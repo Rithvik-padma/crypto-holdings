@@ -9,7 +9,7 @@ const AddHoldingModal: React.FC<AddModalProps>= ({coinHoldings, addCoin, trigger
 
 	const [isOpen, setIsOpen] = useState<boolean>(false)
 	const [selectedCoin, setSelectedCoin] = useState<string>("")
-	const [amount, setAmount] = useState<number>(0)
+	const [amount, setAmount] = useState<number>(NaN)
 	const [coinsList, setCoinsList] = useState<Array<string>>([])
 
 	useEffect(() => {
@@ -41,9 +41,9 @@ const AddHoldingModal: React.FC<AddModalProps>= ({coinHoldings, addCoin, trigger
 
 	const openModal = () => setIsOpen(true)
   const closeModal = () => {
+		setIsOpen(false)
 		setSelectedCoin(coinsList[0])
 		setAmount(NaN)
-		setIsOpen(false)
 	}
 
 	return (
