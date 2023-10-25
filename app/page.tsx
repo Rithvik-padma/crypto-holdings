@@ -105,7 +105,7 @@ const Home: React.FC = () => {
         <div className="mt-1 bg-gray-900 w-[300px] p-4 rounded-lg flex flex-row justify-between items-center">
           <div className="text-[18px] flex flex-col gap-[2px]">
             <span>{selectedCoin?.amount} {selectedCoin?.symbol}</span>
-            {isLoading ? <span className="animate-pulse w-[60px] h-[15px] bg-gray-600"></span> : <span className="text-[11px] text-gray-500">~ ${selectedCoin?.amount*selectedCoinStats?.fiatAmount!!}</span>}
+            {isLoading ? <span className="animate-pulse w-[60px] h-[15px] bg-gray-600"></span> : <span className="text-[11px] text-gray-500">~ ${(selectedCoin?.amount*(selectedCoinStats?.fiatAmount ?? 0)).toFixed(3)}</span>}
           </div>
           <div className="flex flex-col gap-[2px] items-center">
             {isLoading ? <span className="animate-pulse w-[100px] h-[24px] bg-gray-600"></span> : <span className="text-[13px]">1 {selectedCoinStats?.symbol} = ${selectedCoinStats?.fiatAmount}</span>}
