@@ -17,11 +17,9 @@ const AddHoldingModal: React.FC<AddModalProps>= ({coinHoldings, addCoin, trigger
 	}, [])
 
 	useEffect(() => {
-		setSelectedCoin(coinsList[0])
-	}, [coinsList])
-
-	useEffect(() => {
-		setCoinsList(coinsList.filter((coin) => !coinHoldings.find((holding) => holding.symbol === coin)))
+		let newCoinsList = coinsList.filter((coin) => !coinHoldings.find((holding) => holding.symbol === coin))
+		setCoinsList(newCoinsList)
+		setSelectedCoin(newCoinsList[0])
 	}, [coinHoldings])
 
 	const getCoinsList = async () => {

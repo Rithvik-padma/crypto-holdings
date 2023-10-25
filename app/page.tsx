@@ -58,7 +58,7 @@ const Home: React.FC = () => {
       amount: newCoin.amount
     }
     if(newCoinHolding.amount <= 0) triggerError("Amount must be greater than 0")
-    else if(Number.isNaN(newCoinHolding.amount)) triggerError("Amount cannot be empty")
+    else if(!newCoinHolding.amount) triggerError("Amount cannot be empty")
     else setCoinHoldings([...coinHoldings, newCoinHolding])
   }
 
@@ -102,7 +102,7 @@ const Home: React.FC = () => {
             </div>
           </Listbox>
         </div>
-        <div className="mt-1 bg-gray-900 w-[300px] p-4 rounded-lg flex flex-row justify-between items-center">
+        <div className="mt-1 bg-gray-900 w-[300px] p-4 rounded-lg flex flex-row justify-between items-center caret-transparent">
           <div className="text-[18px] flex flex-col gap-[2px]">
             <span>{selectedCoin?.amount} {selectedCoin?.symbol}</span>
             {isLoading ? <span className="animate-pulse w-[60px] h-[15px] bg-gray-600"></span> : <span className="text-[11px] text-gray-500">~ ${(selectedCoin?.amount*(selectedCoinStats?.fiatAmount ?? 0)).toFixed(3)}</span>}
