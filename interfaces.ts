@@ -10,6 +10,7 @@ export interface CoinData{
 
 export interface AddModalProps {
     coinHoldings: CoinHolding[],
+    initialCoinsList:string[],
     addCoin: (newCoin: CoinHolding) => void,
     triggerError: (Error: string) => void
 }

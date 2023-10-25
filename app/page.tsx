@@ -3,7 +3,7 @@ import React, {useState, useEffect} from 'react'
 import {Listbox} from "@headlessui/react"
 import axios from 'axios'
 import {Toaster, toast} from "sonner"
-import {CoinHolding, CoinStats} from "@/interfaces"
+import {CoinHolding, CoinStats, CoinData} from "@/interfaces"
 import {Button} from "@radix-ui/themes"
 import { ChevronUpDownIcon, ChevronDownIcon, ChevronUpIcon} from '@heroicons/react/20/solid'
 import AddHoldingModal from '@/components/addHoldingModal';
@@ -28,11 +28,31 @@ const Home: React.FC = () => {
   const [coinHoldings, setCoinHoldings] = useState<Array<CoinHolding>>(initialCoinHoldings)
   const [selectedCoin, setSelectedCoin] = useState<CoinHolding>(coinHoldings[0])
   const [selectedCoinStats, setSelectedCoinStats] = useState<CoinStats>()
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [coinsList, setCoinsList] = useState<Array<string>>([])
 
   useEffect(() => {
     getFiatAmount(selectedCoin)
   }, [selectedCoin])
+
+  useEffect(() => {
+    getCoinsList()
+  }, [])
+
+  const getCoinsList = async () => {
+		try{
+      const res = await axios.get(`/api/coins`)
+      if(res?.data?.status?.error_code){
+        triggerError(res.data.status.error_message)
+      }
+      else{
+					await setCoinsList(res?.data?.coinData?.map((coin: CoinData) => coin.symbol).filter((coinItem: string) => !coinHoldings.find((holding) => holding.symbol === coinItem)))
+      }
+    }
+    catch(err){
+      if(err instanceof Error) triggerError(err.message)
+    }
+	}
 
   const getFiatAmount = async (coin: CoinHolding) => {
     try{
@@ -72,11 +92,16 @@ const Home: React.FC = () => {
           </p>
         </div>
         <div className='w-full flex flex-col gap-2 items-center my-2'>
-          <AddHoldingModal
-            addCoin={addCoin}
-            triggerError={triggerError}
-            coinHoldings={coinHoldings}
-          />
+          {coinsList.length > 0 ?
+            <AddHoldingModal
+              addCoin={addCoin}
+              initialCoinsList={coinsList}
+              triggerError={triggerError}
+              coinHoldings={coinHoldings}
+            />
+            :
+            <span className="animate-pulse bg-gray-600 w-[70px] h-[20px]"></span>
+          }
           <Listbox value={selectedCoin} onChange={setSelectedCoin}>
             <div className="w-fit relative text-xs cursor-pointer caret-transparent text-white">
               <Listbox.Button className="border-[1px] border-gray-600 relative w-fit rounded-lg bg-gray-900 py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">

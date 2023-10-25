@@ -2,46 +2,28 @@ import { Dialog, Transition, Listbox } from '@headlessui/react'
 import { ChevronUpDownIcon, PlusCircleIcon } from '@heroicons/react/20/solid'
 import {Button, TextField} from "@radix-ui/themes";
 import React, {useState, useEffect} from 'react'
-import axios from "axios"
-import {CoinData, CoinHolding, AddModalProps} from "@/interfaces"
+import {AddModalProps} from "@/interfaces"
 
-const AddHoldingModal: React.FC<AddModalProps>= ({coinHoldings, addCoin, triggerError}: AddModalProps) => {
+const AddHoldingModal: React.FC<AddModalProps>= ({coinHoldings, initialCoinsList, addCoin, triggerError}: AddModalProps) => {
 
 	const [isOpen, setIsOpen] = useState<boolean>(false)
 	const [selectedCoin, setSelectedCoin] = useState<string>("")
 	const [amount, setAmount] = useState<number>(NaN)
-	const [coinsList, setCoinsList] = useState<Array<string>>([])
-
-	useEffect(() => {
-		getCoinsList()
-	}, [])
+	const [coinsList, setCoinsList] = useState<Array<string>>(initialCoinsList)
 
 	useEffect(() => {
 		let newCoinsList = coinsList.filter((coin) => !coinHoldings.find((holding) => holding.symbol === coin))
 		setCoinsList(newCoinsList)
-		setSelectedCoin(newCoinsList[0])
+		setSelectedCoin(coinsList[0])
 	}, [coinHoldings])
 
-	const getCoinsList = async () => {
-		try{
-      const res = await axios.get(`/api/coins`)
-      if(res?.data?.status?.error_code){
-        triggerError(res.data.status.error_message)
-      }
-      else{
-					await setCoinsList(res?.data?.coinData?.map((coin: CoinData) => coin.symbol).filter((coinItem: string) => !coinHoldings.find((holding) => holding.symbol === coinItem)))
-      }
-    }
-    catch(err){
-      if(err instanceof Error) triggerError(err.message)
-    }
-	}
-
-	const openModal = () => setIsOpen(true)
-  const closeModal = () => {
-		setIsOpen(false)
+	const openModal = () => {
 		setSelectedCoin(coinsList[0])
 		setAmount(NaN)
+		setIsOpen(true)
+	}
+  const closeModal = () => {
+		setIsOpen(false)
 	}
 
 	return (
@@ -94,7 +76,7 @@ const AddHoldingModal: React.FC<AddModalProps>= ({coinHoldings, addCoin, trigger
                   <div className="mt-4 flex flex-col items-center gap-3">
 										<div className="flex flex-row gap-3 justify-between items-center text-xs">
 											<label>Select coin :</label>
-											<Listbox value={selectedCoin} onChange={setSelectedCoin}>
+											{<Listbox value={selectedCoin} onChange={setSelectedCoin}>
 												<div className="w-fit relative text-xs cursor-pointer caret-transparent">
 													<Listbox.Button className="relative w-fit rounded-lg bg-gray-900 py-2 pl-3 pr-10 text-left border-[1px] border-gray-600 shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300">
 														<span className="block truncate">{selectedCoin}</span>
@@ -117,7 +99,7 @@ const AddHoldingModal: React.FC<AddModalProps>= ({coinHoldings, addCoin, trigger
 														))}
 													</Listbox.Options>
 												</div>
-											</Listbox>
+											</Listbox>}
 										</div>
 										<div className="flex flex-row gap-3 justify-between items-center text-xs">
 											<label>Select amount :</label>
