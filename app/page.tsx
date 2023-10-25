@@ -28,6 +28,7 @@ const Home: React.FC = () => {
   const [coinHoldings, setCoinHoldings] = useState<Array<CoinHolding>>(initialCoinHoldings)
   const [selectedCoin, setSelectedCoin] = useState<CoinHolding>(coinHoldings[0])
   const [selectedCoinStats, setSelectedCoinStats] = useState<CoinStats>()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   useEffect(() => {
     getFiatAmount(selectedCoin)
@@ -54,7 +55,9 @@ const Home: React.FC = () => {
       symbol: newCoin.symbol.toUpperCase(),
       amount: newCoin.amount
     }
-    setCoinHoldings([...coinHoldings, newCoinHolding])
+    if(newCoinHolding.amount <= 0) triggerError("Amount must be greater than 0")
+    else if(Number.isNaN(newCoinHolding.amount)) triggerError("Amount cannot be empty")
+    else setCoinHoldings([...coinHoldings, newCoinHolding])
   }
 
   return (
@@ -73,7 +76,7 @@ const Home: React.FC = () => {
           />
           <Listbox value={selectedCoin} onChange={setSelectedCoin}>
             <div className="w-fit relative text-xs cursor-pointer caret-transparent text-white">
-              <Listbox.Button className="relative w-fit rounded-lg bg-gray-900 py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+              <Listbox.Button className="border-[1px] border-gray-600 relative w-fit rounded-lg bg-gray-900 py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
                 <span className="block truncate">{selectedCoin.symbol}</span>
                 <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                   <ChevronUpDownIcon
@@ -82,7 +85,7 @@ const Home: React.FC = () => {
                   />
                 </span>
               </Listbox.Button>
-              <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-gray-900 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+              <Listbox.Options className="absolute border-[1px] border-gray-600 mt-1 max-h-60 w-full overflow-auto rounded-md bg-gray-900 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                 {coinHoldings.map((coinHolding, index) => (
                   <Listbox.Option
                     key={index}
