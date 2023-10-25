@@ -9,6 +9,7 @@ export interface CoinData{
 }
 
 export interface AddModalProps {
+    coinHoldings: CoinHolding[],
     addCoin: (newCoin: CoinHolding) => void,
     triggerError: (Error: string) => void
 }

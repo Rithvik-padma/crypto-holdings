@@ -13,7 +13,7 @@ export async function GET(request: Request) {
         id: data?.data[symbol!!]?.id,
         name: data?.data[symbol!!].name,
         symbol: data?.data[symbol!!].symbol,
-        price: data?.data[symbol!!]?.quote?.USD?.price.toFixed(2),
+        price: data?.data[symbol!!]?.quote?.USD?.price.toFixed(4),
         percent_change_24h: data?.data[symbol!!]?.quote?.USD?.percent_change_24h.toFixed(3)
     }
     return Response.json(newData)   

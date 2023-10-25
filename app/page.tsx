@@ -73,6 +73,7 @@ const Home: React.FC = () => {
           <AddHoldingModal
             addCoin={addCoin}
             triggerError={triggerError}
+            coinHoldings={coinHoldings}
           />
           <Listbox value={selectedCoin} onChange={setSelectedCoin}>
             <div className="w-fit relative text-xs cursor-pointer caret-transparent text-white">

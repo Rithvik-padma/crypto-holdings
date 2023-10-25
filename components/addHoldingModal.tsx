@@ -5,7 +5,7 @@ import React, {useState, useEffect} from 'react'
 import axios from "axios"
 import {CoinData, CoinHolding, AddModalProps} from "@/interfaces"
 
-const AddHoldingModal: React.FC<AddModalProps>= ({addCoin, triggerError}: AddModalProps) => {
+const AddHoldingModal: React.FC<AddModalProps>= ({coinHoldings, addCoin, triggerError}: AddModalProps) => {
 
 	const [isOpen, setIsOpen] = useState<boolean>(false)
 	const [selectedCoin, setSelectedCoin] = useState<string>("")
@@ -16,6 +16,14 @@ const AddHoldingModal: React.FC<AddModalProps>= ({addCoin, triggerError}: AddMod
 		getCoinsList()
 	}, [])
 
+	useEffect(() => {
+		setSelectedCoin(coinsList[0])
+	}, [coinsList])
+
+	useEffect(() => {
+		setCoinsList(coinsList.filter((coin) => !coinHoldings.find((holding) => holding.symbol === coin)))
+	}, [coinHoldings])
+
 	const getCoinsList = async () => {
 		try{
       const res = await axios.get(`/api/coins`)
@@ -24,13 +32,13 @@ const AddHoldingModal: React.FC<AddModalProps>= ({addCoin, triggerError}: AddMod
       }
       else{
 					await setCoinsList(res?.data?.coinData?.map((coin: CoinData) => coin.symbol.toUpperCase()))
-					await setSelectedCoin(res?.data?.coinData[0]?.symbol.toUpperCase())
       }
     }
     catch(err){
       if(err instanceof Error) triggerError(err.message)
     }
 	}
+
 	const openModal = () => setIsOpen(true)
   const closeModal = () => {
 		setSelectedCoin(coinsList[0])
