@@ -3,7 +3,7 @@ import React, {useState, useEffect} from 'react'
 import {Listbox} from "@headlessui/react"
 import axios from 'axios'
 import {Toaster, toast} from "sonner"
-import {CoinHolding, CoinStats, CoinData} from "@/interfaces"
+import {CoinHolding, CoinStats, CoinData, Coin} from "@/interfaces"
 import {Button} from "@radix-ui/themes"
 import { ChevronUpDownIcon, ChevronDownIcon, ChevronUpIcon} from '@heroicons/react/20/solid'
 import AddHoldingModal from '@/components/addHoldingModal';
@@ -13,14 +13,17 @@ const Home: React.FC = () => {
   const initialCoinHoldings: Array<CoinHolding> = [
     {
       symbol: 'BTC',
+      id: 'bitcoin',
       amount: 0.5
     },
     {
       symbol: 'ETH',
+      id: 'ethereum',
       amount: 10
     },
     {
       symbol: 'LTC',
+      id: 'litecoin',
       amount: 40
     }
   ]
@@ -29,7 +32,7 @@ const Home: React.FC = () => {
   const [selectedCoin, setSelectedCoin] = useState<CoinHolding>(coinHoldings[0])
   const [selectedCoinStats, setSelectedCoinStats] = useState<CoinStats>()
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [coinsList, setCoinsList] = useState<Array<string>>([])
+  const [coinsList, setCoinsList] = useState<Array<Coin>>([])
 
   useEffect(() => {
     getFiatAmount(selectedCoin)
@@ -46,7 +49,7 @@ const Home: React.FC = () => {
         triggerError(res.data.status.error_message)
       }
       else{
-					await setCoinsList(res?.data?.coinData?.map((coin: CoinData) => coin.symbol).filter((coinItem: string) => !coinHoldings.find((holding) => holding.symbol === coinItem)))
+					await setCoinsList(res?.data?.coinData?.map((coin: CoinData) => {return ({symbol: coin.symbol, id: coin.name})}).filter((coinItem: string) => !coinHoldings.find((holding) => holding.symbol === coinItem)))
       }
     }
     catch(err){
@@ -74,8 +77,9 @@ const Home: React.FC = () => {
   const triggerError = (Error: string) => toast.error(Error)
   const addCoin = (newCoin: CoinHolding) => {
     const newCoinHolding: CoinHolding = {
-      symbol: newCoin.symbol.toUpperCase(),
-      amount: newCoin.amount
+      symbol: newCoin?.symbol?.toUpperCase(),
+      id: newCoin?.id,
+      amount: newCoin?.amount
     }
     if(newCoinHolding.amount <= 0) triggerError("Amount must be greater than 0")
     else if(!newCoinHolding.amount) triggerError("Amount cannot be empty")
@@ -96,7 +100,6 @@ const Home: React.FC = () => {
             <AddHoldingModal
               addCoin={addCoin}
               initialCoinsList={coinsList}
-              triggerError={triggerError}
               coinHoldings={coinHoldings}
             />
             :

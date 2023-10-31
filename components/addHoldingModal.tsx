@@ -1,18 +1,18 @@
 import { Dialog, Transition, Listbox } from '@headlessui/react'					
 import { ChevronUpDownIcon, PlusCircleIcon } from '@heroicons/react/20/solid'
-import {Button, TextField} from "@radix-ui/themes";
+import {Button} from "@radix-ui/themes";
 import React, {useState, useEffect} from 'react'
-import {AddModalProps} from "@/interfaces"
+import {AddModalProps, Coin} from "@/interfaces"
 
-const AddHoldingModal: React.FC<AddModalProps>= ({coinHoldings, initialCoinsList, addCoin, triggerError}: AddModalProps) => {
+const AddHoldingModal: React.FC<AddModalProps>= ({coinHoldings, initialCoinsList, addCoin}: AddModalProps) => {
 
 	const [isOpen, setIsOpen] = useState<boolean>(false)
-	const [selectedCoin, setSelectedCoin] = useState<string>("")
+	const [selectedCoin, setSelectedCoin] = useState<Coin>()
 	const [amount, setAmount] = useState<number>(NaN)
-	const [coinsList, setCoinsList] = useState<Array<string>>(initialCoinsList)
+	const [coinsList, setCoinsList] = useState<Array<Coin>>(initialCoinsList)
 
 	useEffect(() => {
-		let newCoinsList = coinsList.filter((coin) => !coinHoldings.find((holding) => holding.symbol === coin))
+		let newCoinsList = coinsList.filter((coin) => !coinHoldings.find((holding) => holding.symbol === coin.symbol))
 		setCoinsList(newCoinsList)
 		setSelectedCoin(coinsList[0])
 	}, [coinHoldings])
@@ -79,7 +79,7 @@ const AddHoldingModal: React.FC<AddModalProps>= ({coinHoldings, initialCoinsList
 											{<Listbox value={selectedCoin} onChange={setSelectedCoin}>
 												<div className="w-fit relative text-xs cursor-pointer caret-transparent">
 													<Listbox.Button className="relative w-fit rounded-lg bg-gray-900 py-2 pl-3 pr-10 text-left border-[1px] border-gray-600 shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300">
-														<span className="block truncate">{selectedCoin}</span>
+														<span className="block truncate">{selectedCoin?.symbol}</span>
 														<span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
 															<ChevronUpDownIcon
 																className="h-5 w-5 text-gray-400"
@@ -94,7 +94,7 @@ const AddHoldingModal: React.FC<AddModalProps>= ({coinHoldings, initialCoinsList
 																value={coin}
 																className={`text-center py-1 hover:opacity-50 ${selectedCoin === coin && 'bg-gray-800'}`}
 															>
-																{coin}
+																{coin?.symbol}
 															</Listbox.Option>
 														))}
 													</Listbox.Options>
@@ -105,7 +105,7 @@ const AddHoldingModal: React.FC<AddModalProps>= ({coinHoldings, initialCoinsList
 											<label>Select amount :</label>
 											<input 
 												type="number"
-												placeholder={`in ${selectedCoin}`}
+												placeholder={`in ${selectedCoin?.symbol}`}
 												value={amount}
 												onChange={(e) => setAmount(e.target.value.length ? parseFloat(e.target.value) : NaN)}
 												className="w-[60px] text-xs border-[1px] border-gray-600 rounded-md p-1 py-2 text-center text-gray-200 bg-gray-900 focus:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-1" 
@@ -115,7 +115,7 @@ const AddHoldingModal: React.FC<AddModalProps>= ({coinHoldings, initialCoinsList
                       type="button"
                       className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-2 py-1 text-xs font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                       onClick={() => {
-												addCoin({symbol: selectedCoin, amount: amount})
+												addCoin({symbol: selectedCoin?.symbol, id: selectedCoin?.id, amount: amount})
 												closeModal()
 											}}
                     >

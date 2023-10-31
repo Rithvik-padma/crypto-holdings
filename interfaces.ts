@@ -1,22 +1,28 @@
 export interface CoinHolding {
-    symbol: string,
+    symbol: string | undefined,
+    id: string | undefined,
     amount: number,
 }
 
+export interface Coin{
+    symbol: string | undefined,
+    id: string | undefined,
+} 
+
 export interface CoinData{
     id: number,
-    symbol: string
+    symbol: string | undefined,
+    name: string | undefined,
 }
 
 export interface AddModalProps {
     coinHoldings: CoinHolding[],
-    initialCoinsList:string[],
+    initialCoinsList:Coin[],
     addCoin: (newCoin: CoinHolding) => void,
-    triggerError: (Error: string) => void
 }
 
 export interface CoinStats{
-    symbol: string,
+    symbol: string | undefined,
     fiatAmount: number,
     percentChange: number
 }
