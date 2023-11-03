@@ -8,6 +8,8 @@ import {Button} from "@radix-ui/themes"
 import { ChevronUpDownIcon, ChevronDownIcon, ChevronUpIcon} from '@heroicons/react/20/solid'
 import AddHoldingModal from '@/components/addHoldingModal';
 
+let index = 0
+
 const Home: React.FC = () => {
 
   const initialCoinHoldings: Array<CoinHolding> = [
@@ -28,6 +30,8 @@ const Home: React.FC = () => {
     }
   ]
 
+  const providers = ['coinmarket', 'coingecko']
+  const [provider, setProvider] = useState<string>(providers[index])
   const [coinHoldings, setCoinHoldings] = useState<Array<CoinHolding>>(initialCoinHoldings)
   const [selectedCoin, setSelectedCoin] = useState<CoinHolding>(coinHoldings[0])
   const [selectedCoinStats, setSelectedCoinStats] = useState<CoinStats>()
@@ -49,7 +53,7 @@ const Home: React.FC = () => {
         triggerError(res.data.status.error_message)
       }
       else{
-					await setCoinsList(res?.data?.coinData?.map((coin: CoinData) => {return ({symbol: coin.symbol, id: coin.name})}).filter((coinItem: string) => !coinHoldings.find((holding) => holding.symbol === coinItem)))
+					await setCoinsList(res?.data?.coinData?.map((coin: CoinData) => {return ({symbol: coin.symbol, id: coin.id})}).filter((coinItem: string) => !coinHoldings.find((holding) => holding.symbol === coinItem)))
       }
     }
     catch(err){
@@ -60,7 +64,11 @@ const Home: React.FC = () => {
   const getFiatAmount = async (coin: CoinHolding) => {
     try{
       setIsLoading(true)
-      const res = await axios.get(`/api/coinmarket?symbol=${coin.symbol}`)
+      if(index >= providers.length-1) index = 0
+      else index++
+      setProvider(providers[index])
+      const res = await axios.get(`/api/providers/${providers[index]}?id=${coin.id}&symbol=${coin.symbol}`)
+      console.log(res)
       if(res?.data?.status?.error_code){
         triggerError(res.data.status.error_message)
       }
@@ -81,6 +89,7 @@ const Home: React.FC = () => {
       id: newCoin?.id,
       amount: newCoin?.amount
     }
+    console.log(newCoinHolding)
     if(newCoinHolding.amount <= 0) triggerError("Amount must be greater than 0")
     else if(!newCoinHolding.amount) triggerError("Amount cannot be empty")
     else setCoinHoldings([...coinHoldings, newCoinHolding])
@@ -150,6 +159,16 @@ const Home: React.FC = () => {
             </div>
           </div>
         </div>
+        <div className="w-[290px] mt-2 text-[9px]">
+          currently using the <span className="text-gray-400">{provider.toUpperCase()}</span> API
+        </div>
+        <Button
+          className={`mt-4 inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-2 py-1 text-xs font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${isLoading && "bg-gray-200"}`}
+          onClick={() => getFiatAmount(selectedCoin)}
+          disabled={isLoading}
+        >
+          <span>Refresh</span>
+        </Button>
       </div>
       <Toaster position="top-center" richColors/>
     </main>

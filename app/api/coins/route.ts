@@ -11,7 +11,7 @@ export async function GET() {
     const newData = {
         status: data.status,
         coinData: data.data.map((coin: CoinData) => {
-            return ({id: coin.id, symbol: coin.symbol})
+            return ({id: coin.name?.toLowerCase(), symbol: coin.symbol})
         })
     }
 

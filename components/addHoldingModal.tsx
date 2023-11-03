@@ -3,6 +3,7 @@ import { ChevronUpDownIcon, PlusCircleIcon } from '@heroicons/react/20/solid'
 import {Button} from "@radix-ui/themes";
 import React, {useState, useEffect} from 'react'
 import {AddModalProps, Coin} from "@/interfaces"
+import { parse } from 'path';
 
 const AddHoldingModal: React.FC<AddModalProps>= ({coinHoldings, initialCoinsList, addCoin}: AddModalProps) => {
 
@@ -13,13 +14,14 @@ const AddHoldingModal: React.FC<AddModalProps>= ({coinHoldings, initialCoinsList
 
 	useEffect(() => {
 		let newCoinsList = coinsList.filter((coin) => !coinHoldings.find((holding) => holding.symbol === coin.symbol))
+		console.log(newCoinsList)
 		setCoinsList(newCoinsList)
 		setSelectedCoin(coinsList[0])
 	}, [coinHoldings])
 
 	const openModal = () => {
 		setSelectedCoin(coinsList[0])
-		setAmount(NaN)
+		setAmount(0)
 		setIsOpen(true)
 	}
   const closeModal = () => {
@@ -104,10 +106,9 @@ const AddHoldingModal: React.FC<AddModalProps>= ({coinHoldings, initialCoinsList
 										<div className="flex flex-row gap-3 justify-between items-center text-xs">
 											<label>Select amount :</label>
 											<input 
-												type="number"
 												placeholder={`in ${selectedCoin?.symbol}`}
 												value={amount}
-												onChange={(e) => setAmount(e.target.value.length ? parseFloat(e.target.value) : NaN)}
+												onChange={(e) => setAmount(e.target.value.length ? parseFloat(e.target.value) : parseFloat('0'))}
 												className="w-[60px] text-xs border-[1px] border-gray-600 rounded-md p-1 py-2 text-center text-gray-200 bg-gray-900 focus:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-1" 
 											/>
 										</div>
@@ -115,6 +116,7 @@ const AddHoldingModal: React.FC<AddModalProps>= ({coinHoldings, initialCoinsList
                       type="button"
                       className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-2 py-1 text-xs font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                       onClick={() => {
+												console.log(selectedCoin)
 												addCoin({symbol: selectedCoin?.symbol, id: selectedCoin?.id, amount: amount})
 												closeModal()
 											}}
